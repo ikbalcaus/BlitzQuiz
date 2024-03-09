@@ -1,8 +1,4 @@
-const express = require("express");
-const app = express();
-const db = require("./models");
-
-app.use(express.json());
+const { app, db } = require("../setup.js");
 
 app.get("/quizzes", (req, res) => {
     db.all("SELECT * FROM Quizzes", (err, record) => {
