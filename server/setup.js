@@ -9,7 +9,8 @@ app.use(express.json(), (req, res, next) => {
 });
 const db = new sqlite3.Database("database.sqlite3");
 
-if(!fs.existsSync("database.sqlite3")) {
+console.clear();
+if (!fs.existsSync("database.sqlite3")) {
   db.run(`CREATE TABLE Quizzes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,

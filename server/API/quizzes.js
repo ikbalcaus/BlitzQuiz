@@ -1,11 +1,13 @@
 const { app, db } = require("../setup.js");
 
 app.get("/quizzes", (req, res) => {
+    const searchQuery = req.query.search;
     db.all("SELECT * FROM Quizzes", (err, record) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
         }
+        record = record.filter(quiz => quiz.name.toLowerCase().includes(searchQuery.toLowerCase()));
         res.status(200).json(record);
     });
 });

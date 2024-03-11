@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SearchContext } from "../index";
 import { Container, Box, Card, Typography, CardContent } from "@mui/joy";
 
 export default function IndexPage() {
     const [quizzes, setQuizzes] = useState([]);
+    const { search } = useContext(SearchContext);
 
     useEffect(() => {
-        fetch("http://localhost:8080/quizzes")
+        fetch("http://localhost:8080/quizzes?search=" + search)
         .then(res => res.json())
-        .then(data => setQuizzes(data))
-        .catch(err => console.log(err));
-    }, []);
+        .then(data => setQuizzes(data));
+    }, [search]);
 
     return (
         <Container sx={{ my: 2.5 }}>

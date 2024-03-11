@@ -8,5 +8,5 @@ require("./API/answers.js");
 require("./API/results.js");
 
 app.listen(port, () => {
-  console.log("Server API is served on: localhost:" + port)
+  console.log("Server API is running on: http://localhost:" + port);
 });
