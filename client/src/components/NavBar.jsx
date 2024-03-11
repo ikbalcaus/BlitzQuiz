@@ -4,7 +4,7 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function NavBar() {
-    const smallScreen = useMediaQuery("(max-width: 500px)");
+    const smallScreen = useMediaQuery("(max-width: 550px)");
     const [showSearch, setShowSearch] = useState(false);
 
     return (
@@ -14,8 +14,7 @@ export default function NavBar() {
                 flexDirection: smallScreen ? "column" : "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                pt: 0.9,
-                pb: 1.4
+                py: 1
             }}>
                 <Typography level="h2" sx={{
                     px: 2,
@@ -28,7 +27,7 @@ export default function NavBar() {
                     display: (!smallScreen || (showSearch && smallScreen)) ? "flex" : "none",
                     flexDirection: smallScreen ? "column" : "row",
                     gap: 1,
-                    mt: smallScreen ? 1 : 0.4,
+                    mt: smallScreen ? 1 : 0,
                     mb: smallScreen ? 1.2 : 0
                 }}>
                     <Button>MAKE QUIZ</Button>
@@ -45,7 +44,7 @@ export default function NavBar() {
                     cursor: "pointer",
                     boxShadow: 1,
                     borderRadius: 1.6,
-                    "&:hover": {
+                    ":hover": {
                         backgroundColor: "#dde7ee"
                     }
                 }} onClick={() => setShowSearch(!showSearch)} />

@@ -3,7 +3,10 @@ const sqlite3 = require("sqlite3");
 const fs = require("fs");
 
 const app = express();
-app.use(express.json());
+app.use(express.json(), (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
 const db = new sqlite3.Database("database.sqlite3");
 
 if(!fs.existsSync("database.sqlite3")) {
