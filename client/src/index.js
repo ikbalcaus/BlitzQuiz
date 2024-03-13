@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import NavBar from './components/NavBar';
 import IndexPage from './pages/IndexPage';
+import MakeQuiz from './pages/MakeQuiz';
 
 export const SearchContext = createContext();
 
@@ -16,6 +17,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={ <IndexPage /> } />
+          <Route path="/make" element={ <MakeQuiz /> } />
         </Routes>
       </SearchContext.Provider>
     </BrowserRouter>

@@ -13,7 +13,7 @@ export default function IndexPage() {
     }, [search]);
 
     return (
-        <Container sx={{ my: 2.5 }}>
+        <Container sx={{ my: 3 }}>
             <Box sx={{
                 display: "flex",
                 flexWrap: "wrap",
@@ -24,9 +24,9 @@ export default function IndexPage() {
                     <Card key={ quiz.id } sx={{
                         width: 300,
                         cursor: "pointer",
-                        borderColor: "#e9e9e9",
+                        borderColor: "#cdd7e1",
                         ":hover": {
-                            backgroundColor: "#f0f4f8"
+                            bgcolor: "#f0f4f8"
                         }
                     }}>
                         <CardContent>

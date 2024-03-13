@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { SearchContext } from '../index';
+import { Link } from "react-router-dom"
 import { Box, Typography, Input, Button, Container } from '@mui/joy';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -19,15 +20,16 @@ export default function NavBar() {
                 flexDirection: smallScreen ? "column" : "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                pt: 1.1,
-                pb: 1
+                py: 1
             }}>
-                <Typography level="h2" sx={{
-                    px: 2,
-                    ml: smallScreen ? 0 : -2,
-                    py: 1,
-                    cursor: "pointer"
-                }}>BlitzQuiz</Typography>
+                <Link to="/" style={{ textDecoration: "none" }}>
+                    <Typography level="h2" sx={{
+                        px: 2,
+                        ml: smallScreen ? 0 : -2,
+                        py: 1,
+                        cursor: "pointer"
+                    }}>BlitzQuiz</Typography>
+                </Link>
                 <Box sx={{
                     width: smallScreen ? "60%" : "auto",
                     display: (!smallScreen || (showSearch && smallScreen)) ? "flex" : "none",
@@ -36,7 +38,9 @@ export default function NavBar() {
                     mt: smallScreen ? 1 : 0,
                     mb: smallScreen ? 1.2 : 0
                 }}>
-                    <Button>MAKE QUIZ</Button>
+                    <Link to="/make" style={{ width: smallScreen ? "100%" : "auto" }}>
+                        <Button sx={{ width: smallScreen ? "100%" : "auto" }}>MAKE QUIZ</Button>
+                    </Link>
                     <Input
                         placeholder="Search quizzes..."
                         onChange={ event => setSearch(event.target.value) }
@@ -51,13 +55,13 @@ export default function NavBar() {
                     px: 1,
                     py: 0.5,
                     cursor: "pointer",
-                    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.25)",
+                    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
                     borderRadius: 1.6,
                     ":hover": {
-                        backgroundColor: "#dde7ee"
+                        bgcolor: "#dde7ee"
                     },
                     ":active": {
-                        backgroundColor: "#cdd7e1"
+                        bgcolor: "#cdd7e1"
                     }
                 }} onClick={ () => setShowSearch(!showSearch) } />
             </Container>
