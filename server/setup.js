@@ -1,21 +1,18 @@
 const express = require("express");
+const cors = require('cors');
 const sqlite3 = require("sqlite3");
 const fs = require("fs");
 
 const app = express();
-app.use(express.json(), (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  next();
-});
+app.use(express.json(), cors());
 const db = new sqlite3.Database("database.sqlite3");
 
-console.clear();
 if (!fs.existsSync("database.sqlite3")) {
   db.run(`CREATE TABLE Quizzes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
-    numberOfQuestions INTEGER NOT NULL,
+    numberOfQuestions INTEGER NOT NULL DEFAULT 0,
     duration INTEGER NOT NULL DEFAULT 5,
     password TEXT,
     date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP

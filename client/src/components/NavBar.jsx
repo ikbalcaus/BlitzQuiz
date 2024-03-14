@@ -1,14 +1,12 @@
 import { useState, useContext } from 'react';
-import { SearchContext } from '../index';
+import { GlobalContext } from '../index';
 import { Link } from "react-router-dom"
 import { Box, Typography, Input, Button, Container } from '@mui/joy';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function NavBar() {
-    const smallScreen = useMediaQuery("(max-width: 600px)");
-    const [showSearch, setShowSearch] = useState(false);
-    const { setSearch } = useContext(SearchContext);
+    const [showNavbar, setShowNavbar] = useState(false);
+    const { smallScreen, setSearch } = useContext(GlobalContext);
 
     return (
         <Box sx={{
@@ -32,7 +30,7 @@ export default function NavBar() {
                 </Link>
                 <Box sx={{
                     width: smallScreen ? "60%" : "auto",
-                    display: (!smallScreen || (showSearch && smallScreen)) ? "flex" : "none",
+                    display: (!smallScreen || (showNavbar && smallScreen)) ? "flex" : "none",
                     flexDirection: smallScreen ? "column" : "row",
                     gap: 1,
                     mt: smallScreen ? 1 : 0,
@@ -63,7 +61,7 @@ export default function NavBar() {
                     ":active": {
                         bgcolor: "#cdd7e1"
                     }
-                }} onClick={ () => setShowSearch(!showSearch) } />
+                }} onClick={ () => setShowNavbar(!showNavbar) } />
             </Container>
         </Box>
     );

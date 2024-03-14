@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { SearchContext } from "../index";
+import { GlobalContext } from "../index";
 import { Container, Box, Card, Typography, CardContent } from "@mui/joy";
 
 export default function IndexPage() {
     const [quizzes, setQuizzes] = useState([]);
-    const { search } = useContext(SearchContext);
+    const { search } = useContext(GlobalContext);
 
     useEffect(() => {
         fetch("http://localhost:8080/quizzes?search=" + search)
