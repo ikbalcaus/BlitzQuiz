@@ -1,10 +1,11 @@
 import { useState, useContext } from 'react';
 import { GlobalContext } from '../index';
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Box, Typography, Input, Button, Container } from '@mui/joy';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 
 export default function NavBar() {
+    const navigate = useNavigate();
     const [showNavbar, setShowNavbar] = useState(false);
     const { smallScreen, setSearch } = useContext(GlobalContext);
 
@@ -20,14 +21,13 @@ export default function NavBar() {
                 alignItems: "center",
                 py: 1
             }}>
-                <Link to="/" style={{ textDecoration: "none" }}>
-                    <Typography level="h2" sx={{
-                        px: 2,
-                        ml: smallScreen ? 0 : -2,
-                        py: 1,
-                        cursor: "pointer"
-                    }}>BlitzQuiz</Typography>
-                </Link>
+                <Typography level="h2" sx={{
+                    px: 2,
+                    ml: smallScreen ? 0 : -2,
+                    py: 1,
+                    cursor: "pointer"
+                }} onClick={() => navigate("/")}
+                >BlitzQuiz</Typography>
                 <Box sx={{
                     width: smallScreen ? "60%" : "auto",
                     display: (!smallScreen || (showNavbar && smallScreen)) ? "flex" : "none",
@@ -36,12 +36,10 @@ export default function NavBar() {
                     mt: smallScreen ? 1 : 0,
                     mb: smallScreen ? 1.2 : 0
                 }}>
-                    <Link to="/make" style={{ width: smallScreen ? "100%" : "auto" }}>
-                        <Button sx={{ width: smallScreen ? "100%" : "auto" }}>MAKE QUIZ</Button>
-                    </Link>
+                    <Button onClick={() => navigate("/make")}>MAKE QUIZ</Button>
                     <Input
                         placeholder="Search quizzes..."
-                        onChange={ event => setSearch(event.target.value) }
+                        onChange={event => setSearch(event.target.value)}
                     />
                 </Box>
                 <MenuRoundedIcon sx={{
@@ -61,7 +59,7 @@ export default function NavBar() {
                     ":active": {
                         bgcolor: "#cdd7e1"
                     }
-                }} onClick={ () => setShowNavbar(!showNavbar) } />
+                }} onClick={() => setShowNavbar(!showNavbar)} />
             </Container>
         </Box>
     );

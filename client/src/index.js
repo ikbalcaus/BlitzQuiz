@@ -7,6 +7,7 @@ import NavBar from './components/NavBar';
 import IndexPage from './pages/IndexPage';
 import MakeQuizPage from './pages/MakeQuizPage';
 import EditQuizPage from './pages/EditQuizPage';
+import QuestionsPage from './pages/QuestionsPage';
 
 export const GlobalContext = createContext();
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={ <IndexPage /> } />
           <Route path="/make" element={ <MakeQuizPage /> } />
           <Route path="/edit/:id" element={ <EditQuizPage /> } />
+          <Route path="/edit/:id/questions" element={ <QuestionsPage /> } />
         </Routes>
       </GlobalContext.Provider>
     </BrowserRouter>

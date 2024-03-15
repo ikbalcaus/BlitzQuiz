@@ -20,21 +20,22 @@ export default function IndexPage() {
                 justifyContent: "center",
                 gap: 1.2
             }}>
-                { quizzes.map(quiz => (
-                    <Card key={ quiz.id } sx={{
+                {quizzes.map(quiz => (
+                    <Card key={quiz.id} sx={{
                         width: 300,
                         cursor: "pointer",
                         borderColor: "#cdd7e1",
+                        wordWrap: "break-word",
                         ":hover": {
                             bgcolor: "#f0f4f8"
                         }
                     }}>
                         <CardContent>
-                            <Typography level="title-lg">{ quiz.name }</Typography>
-                            <Typography>{ quiz.description }</Typography>
+                            <Typography level="title-lg">{quiz.name}</Typography>
+                            <Typography>{quiz.description}</Typography>
                         </CardContent>
                     </Card>
-                )) }
+                ))}
             </Box>
         </Container>
     );

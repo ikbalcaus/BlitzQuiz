@@ -15,11 +15,16 @@ export default function EditQuizPage() {
 
     useEffect(() => {
         fetch("http://localhost:8080/quizzes/" + id)
-        .then(res => res.json())
-        .then(data => {
-            setQuizData(data)
+        .then(res => {
+            if (!res.ok) {
+                navigate("/");
+            }
+            return res.json();
         })
-    }, [])
+        .then(data => {
+            setQuizData(data);
+        });
+    }, []);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -29,7 +34,7 @@ export default function EditQuizPage() {
         });
     };
 
-    const formSubmit = () => {
+    const addQuiz = () => {
         fetch("http://localhost:8080/quizzes/" + id, {
             method: "PUT",
             headers: {
@@ -38,7 +43,14 @@ export default function EditQuizPage() {
             body: JSON.stringify(quizData)
         })
         .then(res => res.json())
-        .then(navigate("/"))
+        .then(navigate("/"));
+    }
+
+    const deleteQuiz = () => {
+        fetch("http://localhost:8080/quizzes/" + id, {
+            method: "DELETE"
+        })
+        navigate("/");
     }
 
     return (
@@ -99,12 +111,14 @@ export default function EditQuizPage() {
                 gap: 1,
                 mt: 0.5
             }}>
-                <Button onClick={formSubmit}>SUBMIT</Button>
+                <Button onClick={addQuiz}>SUBMIT</Button>
                 <Button
+                    onClick={() => navigate("/edit/" + id + "/questions")}
                     color="neutral"
                     variant="soft"
                 >EDIT QUESTIONS</Button>
                 <Button
+                    onClick={deleteQuiz}
                     color="danger"
                     variant="soft"
                 >DELETE QUIZ</Button>

@@ -29,7 +29,7 @@ export default function MakeQuizPage() {
             body: JSON.stringify(quizData)
         })
         .then(res => res.json())
-        .then(navigate("/"))
+        .then(navigate("/"));
     }
 
     return (
