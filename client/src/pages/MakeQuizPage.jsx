@@ -40,7 +40,7 @@ export default function MakeQuizPage() {
             flexDirection: "column",
             gap: 1.5,
             position: "relative",
-            mt: 6,
+            my: 6,
             left: "50%",
             transform: "translateX(-50%)",
         }}>
@@ -48,7 +48,6 @@ export default function MakeQuizPage() {
                 <Typography level="h5">Quiz name:*</Typography>
                 <Input
                     name="name"
-                    value={quizData.name}
                     onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
@@ -58,7 +57,6 @@ export default function MakeQuizPage() {
                 <Typography level="h5">Quiz description:</Typography>
                 <Textarea
                     name="description"
-                    value={quizData.description}
                     onChange={handleInputChange}
                     minRows={3}
                     maxRows={6}
@@ -71,7 +69,6 @@ export default function MakeQuizPage() {
                 <Input
                     name="duration"
                     type="number"
-                    value={quizData.duration}
                     onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
@@ -82,7 +79,6 @@ export default function MakeQuizPage() {
                 <Input
                     name="password"
                     type="password"
-                    value={quizData.password}
                     onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"

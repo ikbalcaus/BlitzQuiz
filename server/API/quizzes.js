@@ -87,5 +87,3 @@ app.delete("/quizzes/:quizId", (req, res) => {
         res.status(204).send();
     });
 });
-
-module.exports = app;

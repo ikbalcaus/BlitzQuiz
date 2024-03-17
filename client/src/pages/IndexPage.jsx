@@ -13,7 +13,7 @@ export default function IndexPage() {
     }, [search]);
 
     return (
-        <Container sx={{ my: 3 }}>
+        <Container sx={{ my: 4 }}>
             <Box sx={{
                 display: "flex",
                 flexWrap: "wrap",

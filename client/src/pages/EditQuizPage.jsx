@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
 
 export default function EditQuizPage() {
-    const id = window.location.pathname.split("/")[2];
+    const quizId = window.location.pathname.split("/")[2];
     const navigate = useNavigate();
 
     const [quizData, setQuizData] = useState({
@@ -14,7 +14,7 @@ export default function EditQuizPage() {
     });
 
     useEffect(() => {
-        fetch("http://localhost:8080/quizzes/" + id)
+        fetch("http://localhost:8080/quizzes/" + quizId)
         .then(res => {
             if (!res.ok) {
                 navigate("/");
@@ -34,8 +34,8 @@ export default function EditQuizPage() {
         });
     };
 
-    const addQuiz = () => {
-        fetch("http://localhost:8080/quizzes/" + id, {
+    const updateQuiz = () => {
+        fetch("http://localhost:8080/quizzes/" + quizId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -46,8 +46,10 @@ export default function EditQuizPage() {
         .then(navigate("/"));
     }
 
+
+
     const deleteQuiz = () => {
-        fetch("http://localhost:8080/quizzes/" + id, {
+        fetch("http://localhost:8080/quizzes/" + quizId, {
             method: "DELETE"
         })
         navigate("/");
@@ -61,7 +63,7 @@ export default function EditQuizPage() {
             flexDirection: "column",
             gap: 1.5,
             position: "relative",
-            mt: 6,
+            my: 6,
             left: "50%",
             transform: "translateX(-50%)",
         }}>
@@ -111,9 +113,9 @@ export default function EditQuizPage() {
                 gap: 1,
                 mt: 0.5
             }}>
-                <Button onClick={addQuiz}>SUBMIT</Button>
+                <Button onClick={updateQuiz}>SUBMIT</Button>
                 <Button
-                    onClick={() => navigate("/edit/" + id + "/questions")}
+                    onClick={() => navigate("/edit/" + quizId + "/questions")}
                     color="neutral"
                     variant="soft"
                 >EDIT QUESTIONS</Button>

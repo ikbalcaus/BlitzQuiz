@@ -27,6 +27,21 @@ app.post("/questions/:quizId", (req, res) => {
     });
 });
 
+app.put("/questions/:questionId", (req, res) => {
+    const questionId = req.params.questionId;
+    const { name } = req.body;
+    db.run("UPDATE Questions SET name = ? WHERE id = ?",
+    [name, questionId], function(err) {
+        if (err) {
+            res.status(500).send({ message: err.message });
+        }
+        res.status(200).send({
+            id: questionId,
+            name: name
+        });
+    });
+});
+
 app.delete("/questions/:questionId", (req, res) => {
     const questionId = req.params.questionId;
     db.run("DELETE FROM Questions WHERE id = ?", [questionId], function(err) {
@@ -40,4 +55,4 @@ app.delete("/questions/:questionId", (req, res) => {
         }
         res.status(204).send();
     });
-})
+});
