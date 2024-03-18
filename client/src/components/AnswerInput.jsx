@@ -7,7 +7,7 @@ export default function AnswerInput() {
             display: "flex",
             gap: 0.5,
             width: "80%",
-            mx: "auto",
+            mx: "auto"
         }}>
             <Input sx={{
                 width: "100%",
@@ -17,7 +17,6 @@ export default function AnswerInput() {
                 placeholder="Enter new answer"
             />
             <IconButton
-                color="neutral"
                 variant="soft"
             ><Remove /></IconButton>
         </Box>

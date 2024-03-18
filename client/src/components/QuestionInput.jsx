@@ -1,7 +1,7 @@
 import { Box, Input, IconButton } from "@mui/joy";
-import { Remove, ArrowRight } from "@mui/icons-material";
+import { Remove, ArrowRight, ArrowDropDown } from "@mui/icons-material";
 
-export default function QuestionInput({ question, updateQuestionDOM, deleteQuestionDOM }) {
+export default function QuestionInput({ question, updateQuestionDOM, deleteQuestionDOM, onExpand }) {
     const updateQuestion = (event, questionId) => {
         const name = event.target.value
         fetch("http://localhost:8080/questions/" + questionId, {
@@ -27,7 +27,10 @@ export default function QuestionInput({ question, updateQuestionDOM, deleteQuest
             display: "flex",
             gap: 0.5
         }}>
-            <IconButton sx={{ minWidth: 0 }}><ArrowRight /></IconButton>
+            <IconButton
+                sx={{ minWidth: 0 }}
+                onClick={() => onExpand(question.id)}
+            >{question.isExpanded ? <ArrowDropDown /> : <ArrowRight />}</IconButton>
             <Input
                 value={question.name}
                 onChange={(event) => updateQuestion(event, question.id)}
@@ -36,7 +39,6 @@ export default function QuestionInput({ question, updateQuestionDOM, deleteQuest
             />
             <IconButton
                 onClick={() => deleteQuestion(question.id)}
-                color="neutral"
                 variant="soft"
             ><Remove /></IconButton>
         </Box>
