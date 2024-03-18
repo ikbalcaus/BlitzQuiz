@@ -1,8 +1,10 @@
-import { useState, useEffect, useContext } from "react";
-import { GlobalContext } from "../index";
-import { Container, Box, Card, Typography, CardContent } from "@mui/joy";
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { GlobalContext } from '../index';
+import { Container, Box, Card, Typography, CardContent } from '@mui/joy';
 
 export default function IndexPage() {
+    const navigate = useNavigate();
     const [quizzes, setQuizzes] = useState([]);
     const { search } = useContext(GlobalContext);
 
@@ -21,8 +23,11 @@ export default function IndexPage() {
                 gap: 1.2
             }}>
                 {quizzes.map(quiz => (
-                    <Card key={quiz.id} sx={{
+                    <Card key={quiz.id}
+                    onClick={() => navigate("/quiz/" + quiz.id)}
+                    sx={{
                         width: 300,
+                        minHeight: 50,
                         cursor: "pointer",
                         borderColor: "#cdd7e1",
                         wordWrap: "break-word",

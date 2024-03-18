@@ -4,7 +4,6 @@ import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
 
 export default function MakeQuizPage() {
     const navigate = useNavigate();
-
     const [quizData, setQuizData] = useState({
         name: "",
         description: "",

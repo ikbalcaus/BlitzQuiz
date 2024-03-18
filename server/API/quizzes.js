@@ -16,7 +16,8 @@ app.get("/quizzes", (req, res) => {
 
 app.get("/quizzes/:quizId", (req, res) => {
     const quizId = req.params.quizId;
-    db.get("SELECT * FROM Quizzes WHERE id = ?", [quizId], function (err, record) {
+    db.get("SELECT * FROM Quizzes WHERE id = ?",
+    [quizId], function (err, record) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;
@@ -75,7 +76,8 @@ app.put("/quizzes/:quizId", (req, res) => {
 
 app.delete("/quizzes/:quizId", (req, res) => {
     const quizId = req.params.quizId;
-    db.run("DELETE FROM Quizzes WHERE id = ?", [quizId], function(err) {
+    db.run("DELETE FROM Quizzes WHERE id = ?",
+    [quizId], function(err) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;

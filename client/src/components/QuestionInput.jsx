@@ -1,5 +1,5 @@
-import { Box, Input, IconButton } from "@mui/joy";
-import { Remove, ArrowRight, ArrowDropDown } from "@mui/icons-material";
+import { Box, Input, IconButton } from '@mui/joy';
+import { Remove, ArrowRight, ArrowDropDown } from '@mui/icons-material';
 
 export default function QuestionInput({ question, updateQuestionDOM, deleteQuestionDOM, onExpand }) {
     const updateQuestion = (event, questionId) => {

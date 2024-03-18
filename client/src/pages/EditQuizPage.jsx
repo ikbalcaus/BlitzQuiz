@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
 
 export default function EditQuizPage() {
-    const quizId = window.location.pathname.split("/")[2];
     const navigate = useNavigate();
+    const quizId = window.location.pathname.split("/")[2];
 
     const [quizData, setQuizData] = useState({
         name: "",
@@ -43,7 +43,7 @@ export default function EditQuizPage() {
             body: JSON.stringify(quizData)
         })
         .then(res => res.json())
-        .then(navigate("/"));
+        .then(navigate("/quiz/" + quizId));
     }
 
 

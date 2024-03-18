@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { GlobalContext } from '../index';
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 import { Box, Typography, Input, Button, Container } from '@mui/joy';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 

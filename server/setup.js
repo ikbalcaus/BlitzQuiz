@@ -12,7 +12,6 @@ if (!fs.existsSync("database.sqlite3")) {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
-    numberOfQuestions INTEGER NOT NULL DEFAULT 0,
     duration INTEGER NOT NULL DEFAULT 5,
     password TEXT,
     date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
