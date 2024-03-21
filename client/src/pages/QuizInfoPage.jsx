@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, Box, Typography, Input, Button } from '@mui/joy'
+import { GlobalContext } from '../index';
 
-export default function QuizInfo() {
+export default function QuizInfoPage() {
     const navigate = useNavigate();
     const quizId = window.location.pathname.split("/")[2];
     const [quiz, setQuiz] = useState({});
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);
-    
+    const { setNickName } = useContext(GlobalContext);
+
     useEffect(() => {
         fetch("http://localhost:8080/quizzes/" + quizId)
         .then(res => res.json())
@@ -16,6 +18,11 @@ export default function QuizInfo() {
         .then(res => res.json())
         .then(data => setNumberOfQuestions(data.length));
     })
+
+    const startQuiz = () => {
+        setNickName(document.getElementById("nickname-input").value);
+        navigate("/quiz/" + quizId);
+    }
 
     return (
         <Card
@@ -49,10 +56,16 @@ export default function QuizInfo() {
                     mb: 1
                 }}
             >{quiz.description}</Typography>
-            <Input placeholder="Enter your nickname"/>
+            <Input
+                id="nickname-input"
+                placeholder="Enter your nickname"
+            />
             <Typography level="h5">Duration: {quiz.duration} minutes</Typography>
             <Typography level="h5">Number of Questions: {numberOfQuestions}</Typography>
-            <Button variant="soft">Start</Button>
+            <Button
+                variant="soft"
+                onClick={startQuiz}
+            >Start</Button>
             <Box sx={{
                 display: "flex",
                 gap: 1.5,

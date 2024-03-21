@@ -126,12 +126,17 @@ export default function QuestionsPage() {
                                     ><Add /></IconButton>
                                 </Box>
                                 {question.answers.map(answer =>
-                                    <AnswerInput key={answer.id}
-                                        answer={answer}
-                                        questionId={question.id}
-                                        updateAnswerDOM={(data) => setQuestions(questions.map(question => question.id == data.questionId ? { ...question, answers: question.answers.map(answer => answer.id == data.id ? data : answer) } : question))}
-                                        deleteAnswerDOM={(answerId) => setQuestions(questions.map(question => ({ ...question, answers: question.answers.filter(answer => answer.id != answerId) })))}
-                                    />
+                                    <Box key={answer.id} sx={{
+                                        display: "flex",
+                                        alignItems: "center"
+                                    }}>
+                                        <AnswerInput key={answer.id}
+                                            answer={answer}
+                                            questionId={question.id}
+                                            updateAnswerDOM={(data) => setQuestions(questions.map(question => question.id == data.questionId ? { ...question, answers: question.answers.map(answer => answer.id == data.id ? data : answer) } : question))}
+                                            deleteAnswerDOM={(answerId) => setQuestions(questions.map(question => ({ ...question, answers: question.answers.filter(answer => answer.id != answerId) })))}
+                                        />
+                                    </Box>
                                 )}
                             </Box>
                         }

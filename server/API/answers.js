@@ -13,14 +13,15 @@ app.post("/answers/:quizId", (req, res) => {
             id: this.lastID,
             quizId: quizId,
             questionId: questionId,
-            name: name
+            name: name,
+            isCorrect: 0
         });
     });
 });
 
 app.put("/answers/:answerId", (req, res) => {
     const answerId = req.params.answerId;
-    const { questionId, name } = req.body;
+    const { questionId, name, isCorrect } = req.body;
     db.run("UPDATE Answers SET name = ? WHERE id = ?",
     [name, answerId], function(err) {
         if (err) {
@@ -29,7 +30,8 @@ app.put("/answers/:answerId", (req, res) => {
         res.status(200).send({
             id: answerId,
             questionId: questionId,
-            name: name
+            name: name,
+            isCorrect: isCorrect
         });
     });
 });
@@ -49,3 +51,17 @@ app.delete("/answers/:answerId", (req, res) => {
         res.status(204).send();
     });
 });
+
+app.patch("/answers/:answerId", (req, res) => {
+    const answerId = req.params.answerId;
+    const { isCorrect } = req.body;
+    db.run("UPDATE Answers SET isCorrect = ? WHERE id = ?",
+    [!isCorrect, answerId], function(err) {
+        if (err) {
+            res.status(500).send({ message: err.message });
+        }
+        res.status(200).send({
+            isCorrect: !isCorrect
+        });
+    });
+})
