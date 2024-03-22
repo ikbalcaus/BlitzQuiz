@@ -135,6 +135,7 @@ export default function QuestionsPage() {
                                             questionId={question.id}
                                             updateAnswerDOM={(data) => setQuestions(questions.map(question => question.id == data.questionId ? { ...question, answers: question.answers.map(answer => answer.id == data.id ? data : answer) } : question))}
                                             deleteAnswerDOM={(answerId) => setQuestions(questions.map(question => ({ ...question, answers: question.answers.filter(answer => answer.id != answerId) })))}
+                                            changeStateDOM={(answerId) => setQuestions(questions.map(question => ({ ...question, answers: question.answers.map(answer => answer.id == answerId ? { ...answer, isCorrect: !answer.isCorrect } : answer) })))}
                                         />
                                     </Box>
                                 )}

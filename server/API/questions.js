@@ -2,7 +2,7 @@ const { app, db } = require("../setup.js");
 
 app.get("/questions/:quizId", (req, res) => {
     const quizId = req.params.quizId;
-    db.all("SELECT * FROM Questions WHERE quizId = ?",
+    db.all("SELECT id, name FROM Questions WHERE quizId = ?",
     [quizId], function(err, questions) {
         if (err) {
             res.status(500).send({ message: err.message });
@@ -10,7 +10,7 @@ app.get("/questions/:quizId", (req, res) => {
         }
         const record = [];
         questions.forEach(question => {
-            db.all("SELECT * FROM Answers WHERE questionId = ?",
+            db.all("SELECT id, name, isCorrect FROM Answers WHERE questionId = ?",
             [question.id], function(err, answers) {
                 if (err) {
                     res.status(500).send({ message: err.message });
@@ -78,3 +78,15 @@ app.delete("/questions/:questionId", (req, res) => {
         res.status(204).send();
     });
 });
+
+app.get("/questions/:quizId/count", (req, res) => {
+    const quizId = req.params.quizId;
+    db.get("SELECT COUNT(id) AS count FROM Questions WHERE quizId = ?",
+    [quizId], function (err, record) {
+        if (err) {
+            res.status(500).send({ message: err.message });
+            return;
+        }
+        res.status(200).send(record);
+    });
+})

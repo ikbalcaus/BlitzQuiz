@@ -56,12 +56,10 @@ app.patch("/answers/:answerId", (req, res) => {
     const answerId = req.params.answerId;
     const { isCorrect } = req.body;
     db.run("UPDATE Answers SET isCorrect = ? WHERE id = ?",
-    [!isCorrect, answerId], function(err) {
+    [isCorrect, answerId], function(err) {
         if (err) {
             res.status(500).send({ message: err.message });
         }
-        res.status(200).send({
-            isCorrect: !isCorrect
-        });
+        res.status(200).send({ isCorrect: isCorrect });
     });
 })

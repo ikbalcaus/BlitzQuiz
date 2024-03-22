@@ -6,12 +6,7 @@ export default function EditQuizPage() {
     const navigate = useNavigate();
     const quizId = window.location.pathname.split("/")[2];
 
-    const [quizData, setQuizData] = useState({
-        name: "",
-        description: "",
-        duration: 5,
-        password: ""
-    });
+    const [quizData, setQuizData] = useState({});
 
     useEffect(() => {
         fetch("http://localhost:8080/quizzes/" + quizId)
@@ -46,8 +41,6 @@ export default function EditQuizPage() {
         .then(navigate("/quiz/" + quizId));
     }
 
-
-
     const deleteQuiz = () => {
         fetch("http://localhost:8080/quizzes/" + quizId, {
             method: "DELETE"
@@ -63,7 +56,7 @@ export default function EditQuizPage() {
             flexDirection: "column",
             gap: 1.5,
             position: "relative",
-            my: 6,
+            my: 5,
             left: "50%",
             transform: "translateX(-50%)",
         }}>
@@ -73,6 +66,7 @@ export default function EditQuizPage() {
                     name="name"
                     value={quizData.name}
                     onChange={handleInputChange}
+                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
                 />
             </Box>
@@ -84,6 +78,7 @@ export default function EditQuizPage() {
                     onChange={handleInputChange}
                     minRows={3}
                     maxRows={6}
+                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
                 />
             </Box>
@@ -94,6 +89,7 @@ export default function EditQuizPage() {
                     type="number"
                     value={quizData.duration}
                     onChange={handleInputChange}
+                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
                 />
             </Box>
@@ -102,8 +98,8 @@ export default function EditQuizPage() {
                 <Input
                     name="password"
                     type="password"
-                    value={quizData.password}
                     onChange={handleInputChange}
+                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
                 />
             </Box>

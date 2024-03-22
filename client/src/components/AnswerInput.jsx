@@ -1,7 +1,7 @@
 import { Box, Input, IconButton, Checkbox } from '@mui/joy';
-import { Remove } from '@mui/icons-material';
+import { Check, Remove } from '@mui/icons-material';
 
-export default function AnswerInput({ answer, questionId, updateAnswerDOM, deleteAnswerDOM }) {
+export default function AnswerInput({ answer, questionId, updateAnswerDOM, deleteAnswerDOM, changeStateDOM }) {
     const updateAnswer = (event, answerId) => {
         const name = event.target.value
         fetch("http://localhost:8080/answers/" + answerId, {
@@ -33,11 +33,10 @@ export default function AnswerInput({ answer, questionId, updateAnswerDOM, delet
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                isCorrect: answer.isCorrect
+                isCorrect: !answer.isCorrect
             })
-        })
-        .then(res => res.json())
-        .then(data => updateAnswerDOM(data));
+        });
+        changeStateDOM(answerId);
     }
 
     return (
@@ -52,7 +51,7 @@ export default function AnswerInput({ answer, questionId, updateAnswerDOM, delet
         }}>
             <Checkbox
                 checked={answer.isCorrect}
-                onClick={(event) => changeStateAnswer(event, answer.id)}
+                onClick={() => changeStateAnswer(answer.id)}
             />
             <Input sx={{
                 width: "100%",

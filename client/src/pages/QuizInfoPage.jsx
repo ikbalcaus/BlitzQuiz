@@ -8,20 +8,20 @@ export default function QuizInfoPage() {
     const quizId = window.location.pathname.split("/")[2];
     const [quiz, setQuiz] = useState({});
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);
-    const { setNickName } = useContext(GlobalContext);
+    const { setNickname } = useContext(GlobalContext);
 
     useEffect(() => {
         fetch("http://localhost:8080/quizzes/" + quizId)
         .then(res => res.json())
         .then(data => setQuiz(data));
-        fetch("http://localhost:8080/questions/" + quizId)
+        fetch("http://localhost:8080/questions/" + quizId + "/count")
         .then(res => res.json())
-        .then(data => setNumberOfQuestions(data.length));
-    })
+        .then(data => setNumberOfQuestions(data.count));
+    }, []);
 
     const startQuiz = () => {
-        setNickName(document.getElementById("nickname-input").value);
-        navigate("/quiz/" + quizId);
+        setNickname(document.getElementById("nickname-input").value);
+        navigate("/exam/" + quizId);
     }
 
     return (
@@ -35,7 +35,7 @@ export default function QuizInfoPage() {
                 flexDirection: "column",
                 gap: 1.5,
                 position: "relative",
-                my: 6,
+                my: 5,
                 left: "50%",
                 transform: "translateX(-50%)",
                 p: 3,
@@ -59,6 +59,7 @@ export default function QuizInfoPage() {
             <Input
                 id="nickname-input"
                 placeholder="Enter your nickname"
+                autoComplete="off"
             />
             <Typography level="h5">Duration: {quiz.duration} minutes</Typography>
             <Typography level="h5">Number of Questions: {numberOfQuestions}</Typography>

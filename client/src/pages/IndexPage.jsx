@@ -15,25 +15,24 @@ export default function IndexPage() {
     }, [search]);
 
     return (
-        <Container sx={{ my: 4 }}>
+        <Container sx={{ my: 5 }}>
             <Box sx={{
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
-                gap: 1.2
+                gap: 4
             }}>
                 {quizzes.map(quiz => (
-                    <Card key={quiz.id}
+                    <Card key={quiz.id} color="neutral" variant="soft"
                     onClick={() => navigate("/quiz/" + quiz.id)}
                     sx={{
-                        width: 300,
-                        minHeight: 50,
+                        width: 250,
+                        minHeight: 125,
                         cursor: "pointer",
-                        borderColor: "#cdd7e1",
+                        boxShadow: "0 1px 7px rgba(0, 0, 0, 0.2)",
                         wordWrap: "break-word",
-                        ":hover": {
-                            bgcolor: "#f0f4f8"
-                        }
+                        py: 2.5,
+                        px: 3.5
                     }}>
                         <CardContent>
                             <Typography level="title-lg">{quiz.name}</Typography>

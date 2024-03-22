@@ -2,7 +2,7 @@ const { app, db } = require("../setup.js");
 
 app.get("/quizzes", (req, res) => {
     const searchQuery = req.query.search;
-    db.all("SELECT * FROM Quizzes", function (err, record) {
+    db.all("SELECT id, name, description FROM Quizzes", function (err, record) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;
@@ -16,7 +16,7 @@ app.get("/quizzes", (req, res) => {
 
 app.get("/quizzes/:quizId", (req, res) => {
     const quizId = req.params.quizId;
-    db.get("SELECT * FROM Quizzes WHERE id = ?",
+    db.get("SELECT name, description, duration FROM Quizzes WHERE id = ?",
     [quizId], function (err, record) {
         if (err) {
             res.status(500).send({ message: err.message });
@@ -42,7 +42,6 @@ app.post("/quizzes", (req, res) => {
             id: this.lastID,
             name: name,
             description: description,
-            numberOfQuestions: 0,
             duration: duration,
             password: password
         });
@@ -51,10 +50,10 @@ app.post("/quizzes", (req, res) => {
 
 app.put("/quizzes/:quizId", (req, res) => {
     const quizId = req.params.quizId;
-    const { name, description, numberOfQuestions, duration, password } = req.body;
+    const { name, description, duration, password } = req.body;
     const date = new Date().toISOString().slice(0, 19).replace("T", " ");
-    db.run("UPDATE Quizzes SET name = ?, description = ?, numberOfQuestions = ?, duration = ?, password = ?, date = ? WHERE id = ?", 
-    [name, description, numberOfQuestions, duration, password, date, quizId], function(err) {
+    db.run("UPDATE Quizzes SET name = ?, description = ?, duration = ?, password = ?, date = ? WHERE id = ?", 
+    [name, description, duration, password, date, quizId], function(err) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;
@@ -67,7 +66,6 @@ app.put("/quizzes/:quizId", (req, res) => {
             id: quizId,
             name: name,
             description: description,
-            numberOfQuestions: numberOfQuestions,
             duration: duration,
             password: password
         });

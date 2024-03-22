@@ -4,12 +4,7 @@ import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
 
 export default function MakeQuizPage() {
     const navigate = useNavigate();
-    const [quizData, setQuizData] = useState({
-        name: "",
-        description: "",
-        duration: 5,
-        password: ""
-    });
+    const [quizData, setQuizData] = useState({});
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -19,7 +14,7 @@ export default function MakeQuizPage() {
         }));
     };
 
-    const formSubmit = () => {
+    const makeQuiz = () => {
         fetch("http://localhost:8080/quizzes", {
             method: "POST",
             headers: {
@@ -39,7 +34,7 @@ export default function MakeQuizPage() {
             flexDirection: "column",
             gap: 1.5,
             position: "relative",
-            my: 6,
+            my: 5,
             left: "50%",
             transform: "translateX(-50%)",
         }}>
@@ -85,7 +80,7 @@ export default function MakeQuizPage() {
             </Box>
             <Button
                 sx={{ mt: 0.5 }}
-                onClick={formSubmit}
+                onClick={makeQuiz}
             >SUBMIT</Button>
         </Box>
     )
