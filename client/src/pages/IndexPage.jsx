@@ -20,20 +20,24 @@ export default function IndexPage() {
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
-                gap: 4
+                gap: 3
             }}>
                 {quizzes.map(quiz => (
                     <Card key={quiz.id} color="neutral" variant="soft"
-                    onClick={() => navigate("/quiz/" + quiz.id)}
-                    sx={{
-                        width: 250,
-                        minHeight: 125,
-                        cursor: "pointer",
-                        boxShadow: "0 1px 7px rgba(0, 0, 0, 0.2)",
-                        wordWrap: "break-word",
-                        py: 2.5,
-                        px: 3.5
-                    }}>
+                        onClick={() => navigate("/quiz/" + quiz.id)}
+                        sx={{
+                            width: 250,
+                            minHeight: 125,
+                            cursor: "pointer",
+                            boxShadow: "0 1px 7px rgba(0, 0, 0, 0.2)",
+                            wordWrap: "break-word",
+                            py: 2,
+                            px: 2.5,
+                            ":hover": {
+                                bgcolor: "background.level2"
+                            }
+                        }}
+                    >
                         <CardContent>
                             <Typography level="title-lg">{quiz.name}</Typography>
                             <Typography>{quiz.description}</Typography>

@@ -8,7 +8,7 @@ app.get("/questions/:quizId", (req, res) => {
             res.status(500).send({ message: err.message });
             return;
         }
-        const record = [];
+        let record = [];
         questions.forEach(question => {
             db.all("SELECT id, name, isCorrect FROM Answers WHERE questionId = ?",
             [question.id], function(err, answers) {
