@@ -1,32 +1,14 @@
 const { app, db } = require("../setup.js");
 
-app.get("/exam/:quizId", (req, res) => {
+app.get("/exam/:quizId", async (req, res) => {
     const quizId = req.params.quizId;
-    db.all("SELECT id, name FROM Questions WHERE quizId = ?",
-    [quizId], function(err, questions) {
+    db.all("SELECT nickname, correctAnswers, totalAnswers, duration, date FROM Results WHERE quizId = ? ORDER BY date DESC",
+    [quizId], function(err, record) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;
         }
-        let record = [];
-        questions.forEach(question => {
-            db.all("SELECT id, name FROM Answers WHERE questionId = ?",
-            [question.id], function(err, answers) {
-                if (err) {
-                    res.status(500).send({ message: err.message });
-                    return;
-                }
-                record.push({
-                    id: question.id,
-                    quizId: quizId,
-                    name: question.name,
-                    answers: answers.map(answer => ({ ...answer, isCorrect: 0 }))
-                });
-                if (record.length == questions.length) {
-                    res.status(200).send(record);
-                }
-            });
-        });
+        res.status(200).send(record);
     });
 });
 
@@ -38,32 +20,49 @@ app.post("/exam/:quizId", async (req, res) => {
         res.status(302).send({ message: "Nickname is required" });
         return;
     }
-    setTimeout(() => {
-        saveResultToDatabase(nickname, quizId, 0, duration);
-    }, duration * 60000);
-    res.status(201).send({
-        quizId: quizId,
-        nickname: nickname,
-        duration: duration
+    let record = [];
+    db.all("SELECT id, name FROM Questions WHERE quizId = ?",
+    [quizId], function(err, questions) {
+        if (err) {
+            res.status(500).send({ message: err.message });
+            return;
+        }
+        questions.forEach(question => {
+            db.all("SELECT id, name FROM Answers WHERE questionId = ?",
+            [question.id], function(err, answers) {
+                if (err) {
+                    res.status(500).send({ message: err.message });
+                    return;
+                }
+                record.push({
+                    id: question.id,
+                    name: question.name,
+                    answers: answers.map(answer => ({ ...answer, isCorrect: 0 }))
+                });
+                if (record.length == questions.length) {
+                    res.status(201).send(record);
+                }
+            });
+        });
     });
 });
 
 app.put("/exam/:quizId", async (req, res) => {
     const quizId = req.params.quizId;
-    const { nickname, userAnswers } = req.body;
+    const { nickname, userAnswers, duration } = req.body;
     const totalAnswers = userAnswers.length;
     let correctAnswers = 0;
     if (!nickname) {
         res.status(302).send({ message: "Nickname is required" });
         return;
     }
+    let record = [];
     db.all("SELECT id FROM Questions WHERE quizId = ?",
     [quizId], function(err, questions) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;
         }
-        let record = [];
         questions.forEach(question => {
             db.all("SELECT id, name, isCorrect FROM Answers WHERE questionId = ?",
             [question.id], function(err, answers) {
@@ -89,14 +88,11 @@ app.put("/exam/:quizId", async (req, res) => {
                     for (let i = 0; i < totalAnswers; i++) {
                         if (JSON.stringify(record[i].answers) == JSON.stringify(userAnswers[i].answers)) correctAnswers++;
                     }
-                    const score = (correctAnswers / totalAnswers * 100).toFixed(2);
-                    saveResultToDatabase(nickname, quizId, correctAnswers, 0);
+                    saveResultToDatabase(quizId, nickname, correctAnswers, totalAnswers, duration);
                     res.status(200).send({
-                        quizId: quizId,
                         nickname: nickname,
                         correctAnswers: correctAnswers,
-                        totalAnswers: totalAnswers,
-                        score: score
+                        totalAnswers: totalAnswers
                     });
                 }
             });
@@ -130,8 +126,11 @@ const getNumberOfQuestion = (quizId) => {
     });
 }
 
-const saveResultToDatabase = async (nickname, quizId, correctAnswers, duration) => {
-    const score = correctAnswers / (await getNumberOfQuestion(quizId) || 1) * 100;
-    db.run(`INSERT INTO Results (quizId, username, score, correctAnswers, duration) VALUES (?, ?, ?, ?, ?)`,
-    [quizId, nickname, score, correctAnswers, duration], () => {});
+const saveResultToDatabase = async (quizId, nickname, correctAnswers, totalAnswers, duration) => {
+    db.run(`INSERT INTO Results (quizId, nickname, correctAnswers, totalAnswers, duration) VALUES (?, ?, ?, ?, ?)`,
+    [quizId, nickname, correctAnswers, totalAnswers, duration], (err) => {
+        if (err) {
+            console.log(err.message);
+        }
+    });
 };

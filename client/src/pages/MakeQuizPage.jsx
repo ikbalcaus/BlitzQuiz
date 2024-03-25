@@ -4,7 +4,7 @@ import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
 
 export default function MakeQuizPage() {
     const navigate = useNavigate();
-    const [quizData, setQuizData] = useState({});
+    const [quizData, setQuizData] = useState({ duration: 5 });
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -23,13 +23,14 @@ export default function MakeQuizPage() {
             body: JSON.stringify(quizData)
         })
         .then(res => res.json())
-        .then(navigate("/"));
+        .then(data => navigate("/edit/" + data.id + "/questions"));
     }
 
     return (
         <Box sx={{
             width: "40%",
             minWidth: "300px",
+            maxWidth: "600px",
             display: "flex",
             flexDirection: "column",
             gap: 1.5,
@@ -45,6 +46,7 @@ export default function MakeQuizPage() {
                     onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
+                    spellCheck="false"
                 />
             </Box>
             <Box>
@@ -63,9 +65,13 @@ export default function MakeQuizPage() {
                 <Input
                     name="duration"
                     type="number"
+                    value={quizData.duration}
+                    min={1}
+                    max={120}
                     onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
+                    spellCheck="false"
                 />
             </Box>
             <Box>

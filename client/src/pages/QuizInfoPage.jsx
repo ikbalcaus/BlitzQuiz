@@ -19,18 +19,14 @@ export default function QuizInfoPage() {
         .then(data => setNumberOfQuestions(data.count));
     }, []);
 
-    const startQuiz = () => {
-        setNickname(document.getElementById("nickname-input").value);
-        navigate("/exam/" + quizId);
-    }
-
     return (
         <Card
             color="primary"
             variant="solid"
             sx={{
-                width: "30%",
+                width: "40%",
                 minWidth: "300px",
+                maxWidth: "500px",
                 display: "flex",
                 flexDirection: "column",
                 gap: 1.5,
@@ -60,12 +56,16 @@ export default function QuizInfoPage() {
                 id="nickname-input"
                 placeholder="Enter your nickname"
                 autoComplete="off"
+                spellCheck="false"
             />
             <Typography level="h5">Duration: {quiz.duration} minutes</Typography>
             <Typography level="h5">Number of Questions: {numberOfQuestions}</Typography>
             <Button
                 variant="soft"
-                onClick={startQuiz}
+                onClick={() => {
+                    setNickname(document.getElementById("nickname-input").value);
+                    navigate("/exam/" + quizId);
+                }}
             >Start</Button>
             <Box sx={{
                 display: "flex",
@@ -76,17 +76,18 @@ export default function QuizInfoPage() {
                     variant="soft"
                     onClick={() => navigate("/edit/" + quizId)}
                     sx={{
-                        width: "35%",
+                        width: "40%",
                         minWidth: "100px"
                     }}
                 >Edit</Button>
                 <Button
                     variant="soft"
+                    onClick={() => navigate("/results/" + quizId)}
                     sx={{
-                        width: "35%",
+                        width: "40%",
                         minWidth: "120px"
                     }}
-                >See results</Button>
+                >View results</Button>
             </Box>
         </Card>
     )

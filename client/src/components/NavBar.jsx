@@ -40,6 +40,7 @@ export default function NavBar() {
                     <Input
                         placeholder="Search quizzes..."
                         onChange={event => setSearch(event.target.value)}
+                        spellCheck="false"
                     />
                 </Box>
                 <MenuRoundedIcon sx={{

@@ -52,6 +52,7 @@ export default function EditQuizPage() {
         <Box sx={{
             width: "40%",
             minWidth: "300px",
+            maxWidth: "600px",
             display: "flex",
             flexDirection: "column",
             gap: 1.5,
@@ -66,8 +67,9 @@ export default function EditQuizPage() {
                     name="name"
                     value={quizData.name}
                     onChange={handleInputChange}
-                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
+                    autoComplete="off"
+                    spellCheck="false"
                 />
             </Box>
             <Box>
@@ -88,9 +90,12 @@ export default function EditQuizPage() {
                     name="duration"
                     type="number"
                     value={quizData.duration}
+                    min={1}
+                    max={120}
                     onChange={handleInputChange}
-                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
+                    autoComplete="off"
+                    spellCheck="false"
                 />
             </Box>
             <Box>
@@ -99,8 +104,9 @@ export default function EditQuizPage() {
                     name="password"
                     type="password"
                     onChange={handleInputChange}
-                    autoComplete="off"
                     sx={{ boxShadow: "none" }}
+                    autoComplete="off"
+                    spellCheck="false"
                 />
             </Box>
             <Box sx={{
@@ -111,7 +117,10 @@ export default function EditQuizPage() {
             }}>
                 <Button onClick={updateQuiz}>SUBMIT</Button>
                 <Button
-                    onClick={() => navigate("/edit/" + quizId + "/questions")}
+                    onClick={() => {
+                        updateQuiz();
+                        navigate("/edit/" + quizId + "/questions");
+                    }}
                     color="neutral"
                     variant="soft"
                 >EDIT QUESTIONS</Button>

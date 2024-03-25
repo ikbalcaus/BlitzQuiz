@@ -35,7 +35,7 @@ export default function QuestionInput({ question, updateQuestionDOM, deleteQuest
                 value={question.name}
                 onChange={(event) => updateQuestion(event, question.id)}
                 sx={{ width: "100%" }}
-                autoComplete="off"
+                spellCheck="false"
             />
             <IconButton
                 onClick={() => deleteQuestion(question.id)}

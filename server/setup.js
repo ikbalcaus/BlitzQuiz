@@ -34,11 +34,11 @@ if (!fs.existsSync("database.sqlite3")) {
   db.run(`CREATE TABLE Results (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     quizId INTEGER,
-    username TEXT NOT NULL,
-    score INTEGER NOT NULL,
-    correctAnswers TEXT NOT NULL,
+    nickname TEXT NOT NULL,
+    correctAnswers INTEGER NOT NULL,
+    totalAnswers INTEGER NOT NULL,
     date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    duration INTEGER NOT NULL,
+    duration TEXT NOT NULL,
     FOREIGN KEY (quizId) REFERENCES Quizzes(id)
   )`);
   console.log("Database created");

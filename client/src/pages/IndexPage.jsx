@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../index';
-import { Container, Box, Card, Typography, CardContent } from '@mui/joy';
+import { Container, Card, Typography, CardContent } from '@mui/joy';
 
 export default function IndexPage() {
     const navigate = useNavigate();
@@ -15,19 +15,19 @@ export default function IndexPage() {
     }, [search]);
 
     return (
-        <Container sx={{ my: 5 }}>
-            <Box sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: 3
-            }}>
+        <Container sx={{
+            my: 5,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 3
+        }}>
                 {quizzes.map(quiz => (
                     <Card key={quiz.id} color="neutral" variant="soft"
                         onClick={() => navigate("/quiz/" + quiz.id)}
                         sx={{
-                            width: 250,
-                            minHeight: 125,
+                            width: 225,
+                            minHeight: 140,
                             cursor: "pointer",
                             boxShadow: "0 1px 7px rgba(0, 0, 0, 0.2)",
                             wordWrap: "break-word",
@@ -44,7 +44,6 @@ export default function IndexPage() {
                         </CardContent>
                     </Card>
                 ))}
-            </Box>
         </Container>
     );
 }

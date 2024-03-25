@@ -10,6 +10,7 @@ import ExamPage from './pages/ExamPage';
 import MakeQuizPage from './pages/MakeQuizPage';
 import EditQuizPage from './pages/EditQuizPage';
 import QuestionsPage from './pages/QuestionsPage';
+import ResultsPage from './pages/ResultsPage';
 
 export const GlobalContext = createContext();
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/make" element={ <MakeQuizPage /> } />
           <Route path="/edit/:id" element={ <EditQuizPage /> } />
           <Route path="/edit/:id/questions" element={ <QuestionsPage /> } />
+          <Route path="/results/:id" element={ <ResultsPage /> } />
         </Routes>
       </GlobalContext.Provider>
     </BrowserRouter>

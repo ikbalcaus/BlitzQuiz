@@ -1,23 +1,22 @@
 import { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Container, Box, Typography, Checkbox, Button } from '@mui/joy'
+import { Container, Box, Typography, Checkbox, Button, Modal, ModalDialog } from '@mui/joy'
 import { GlobalContext } from '../index';
 
 export default function ExamPage() {
     const navigate = useNavigate();
     const quizId = window.location.pathname.split("/")[2];
-    const [quizName, setQuizName] = useState("");
+    const [quizData, setQuizData] = useState({});
     const [questions, setQuestions] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [result, setResult] = useState({});
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [intervalId, setIntervalId] = useState(null);
+    const [timeoutId, setTimeoutId] = useState(null);
     const { nickname } = useContext(GlobalContext);
 
     useEffect(() => {
         if (nickname) {
-            fetch("http://localhost:8080/quizzes/" + quizId)
-            .then(res => res.json())
-            .then(data => { setQuizName(data.name) });
-            fetch("http://localhost:8080/exam/" + quizId)
-            .then(res => res.json())
-            .then(data => { setQuestions(data) });
             fetch("http://localhost:8080/exam/" + quizId, {
                 method: "POST",
                 headers: {
@@ -26,14 +25,34 @@ export default function ExamPage() {
                 body: JSON.stringify({ nickname: nickname })
             })
             .then(res => res.json())
+            .then(data => { setQuestions(data) });
+            fetch("http://localhost:8080/quizzes/" + quizId)
+            .then(res => res.json())
             .then(data => {
-                setTimeout(() => {
-                    navigate("/quiz/" + quizId);
+                setQuizData(data);
+                setTimeLeft(data.duration * 60);
+                const intervalId = setInterval(() => {
+                    setTimeLeft(prevState => prevState - 1);
+                }, 1000);
+                const timeoutId = setTimeout(() => {
+                    setShowModal(true);
                 }, data.duration * 60000);
+                setIntervalId(intervalId);
+                setTimeoutId(timeoutId);
             });
         }
         else navigate("/quiz/" + quizId);
+        return () => {
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
+        }
     }, []);
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
 
     const markAnswer = (questionId, answerId) => {
         setQuestions(
@@ -44,8 +63,8 @@ export default function ExamPage() {
                         ? { ...answer, isCorrect: (answer.isCorrect ? 0 : 1) }
                         : answer
                 ),
-            } : question )
-        );
+            } : question
+        ));
     }
 
     const finishQuiz = () => {
@@ -57,10 +76,16 @@ export default function ExamPage() {
             body: JSON.stringify({
                 nickname: nickname,
                 userAnswers: questions,
+                duration: `${formatTime(quizData.duration * 60 - timeLeft)} / ${formatTime(quizData.duration * 60)}`
             })
         })
         .then(res => res.json())
-        .then(data => console.log(data));
+        .then(data => {
+            setShowModal(true);
+            setResult(data);
+            clearTimeout(timeoutId);
+            clearInterval(intervalId);
+        });
     }
 
     return (
@@ -73,12 +98,18 @@ export default function ExamPage() {
             boxShadow: "0 1px 7px rgba(0, 0, 0, 0.25)",
             borderRadius: 6,
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            position: "relative",
         }}>
+            <Typography sx={{
+                position: "absolute",
+                right: 15,
+                top: 5
+            }}>Timer: {formatTime(timeLeft)}</Typography>
             <Typography
                 level="h2"
                 sx={{ alignSelf: "center" }}
-            >{quizName}</Typography>
+            >{quizData.name}</Typography>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -119,6 +150,32 @@ export default function ExamPage() {
                     mb: 2,
                 }}
             >Submit</Button>
+            <Modal open={showModal}>
+                <ModalDialog>
+                    <Typography
+                        level="h3"
+                        sx={{ alignSelf: "center" }}
+                    >{nickname}</Typography>
+                    <Typography>Your score is: <strong>{(result.correctAnswers && result.totalAnswers) ? (result.correctAnswers / result.totalAnswers * 100).toFixed() : 0}%</strong></Typography>
+                    <Typography>You answered <strong>{result.correctAnswers}</strong> out of <strong>{result.totalAnswers}</strong> questions correctly</Typography>
+                    <Box sx={{
+                        display: "flex",
+                        gap: 2,
+                        justifyContent: "center",
+                        mt: 1,
+                        mb: 0.8
+                    }}>
+                        <Button
+                            onClick={() => navigate("/quiz/" + quizId)}
+                            sx={{ width: "40%" }}
+                        >Try again</Button>
+                        <Button
+                            onClick={() => navigate("/results/" + quizId)}
+                            sx={{ width: "40%" }}
+                        >View results</Button>
+                    </Box>
+                </ModalDialog>
+            </Modal>
         </Container>
     )
 }

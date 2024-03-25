@@ -74,7 +74,7 @@ export default function QuestionsPage() {
                         id="add-question-input"
                         placeholder="Enter new question"
                         sx={{ width: "100%" }}
-                        autoComplete="off"
+                        spellCheck="false"
                     />
                     <IconButton
                         color="primary"
@@ -114,11 +114,11 @@ export default function QuestionsPage() {
                                 }}>
                                     <Input sx={{
                                         width: "100%",
-                                        borderTop: 0
+                                        borderTop: 0,
+                                        spellCheck: "false"
                                     }}
                                         id={"add-answer-input-" + question.id}
                                         placeholder="Enter new answer"
-                                        autoComplete="off"
                                     />
                                     <IconButton
                                         variant="soft"

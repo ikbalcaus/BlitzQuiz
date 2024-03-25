@@ -2,7 +2,7 @@ const { app, db } = require("../setup.js");
 
 app.get("/quizzes", (req, res) => {
     const searchQuery = req.query.search;
-    db.all("SELECT id, name, description FROM Quizzes", function (err, record) {
+    db.all("SELECT id, name, description, duration FROM Quizzes", function (err, record) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;

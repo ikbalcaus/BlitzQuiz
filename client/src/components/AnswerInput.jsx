@@ -1,5 +1,5 @@
 import { Box, Input, IconButton, Checkbox } from '@mui/joy';
-import { Check, Remove } from '@mui/icons-material';
+import { Remove } from '@mui/icons-material';
 
 export default function AnswerInput({ answer, questionId, updateAnswerDOM, deleteAnswerDOM, changeStateDOM }) {
     const updateAnswer = (event, answerId) => {
@@ -58,8 +58,8 @@ export default function AnswerInput({ answer, questionId, updateAnswerDOM, delet
                 borderTop: 0
             }}
                 value={answer.name}
-                onChange={() => updateAnswer(answer.id)}
-                autoComplete="off"
+                onChange={(event) => updateAnswer(event, answer.id)}
+                spellCheck="false"
             />
             <IconButton
                 variant="soft"
