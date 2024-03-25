@@ -37,7 +37,7 @@ export default function ResultsPage() {
                         <tr key={index}>
                             <td>{index + 1}.</td>
                             <td>{result.nickname}</td>
-                            <td>{result.correctAnswers}/{result.totalAnswers}</td>
+                            <td>{result.correctAnswers} / {result.totalAnswers}</td>
                             <td>{(result.correctAnswers && result.totalAnswers) ? (result.correctAnswers / result.totalAnswers * 100).toFixed() : 0}%</td>
                             <td>{result.duration}</td>
                             <td>{result.date}</td>

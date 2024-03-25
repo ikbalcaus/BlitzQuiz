@@ -75,18 +75,12 @@ export default function QuizInfoPage() {
                 <Button
                     variant="soft"
                     onClick={() => navigate("/edit/" + quizId)}
-                    sx={{
-                        width: "40%",
-                        minWidth: "100px"
-                    }}
+                    sx={{ width: "40%" }}
                 >Edit</Button>
                 <Button
                     variant="soft"
                     onClick={() => navigate("/results/" + quizId)}
-                    sx={{
-                        width: "40%",
-                        minWidth: "120px"
-                    }}
+                    sx={{ width: "40%" }}
                 >View results</Button>
             </Box>
         </Card>

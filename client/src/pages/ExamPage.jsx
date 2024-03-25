@@ -8,8 +8,8 @@ export default function ExamPage() {
     const quizId = window.location.pathname.split("/")[2];
     const [quizData, setQuizData] = useState({});
     const [questions, setQuestions] = useState([]);
-    const [showModal, setShowModal] = useState(false);
     const [result, setResult] = useState({});
+    const [showModal, setShowModal] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
     const [intervalId, setIntervalId] = useState(null);
     const [timeoutId, setTimeoutId] = useState(null);
@@ -17,15 +17,6 @@ export default function ExamPage() {
 
     useEffect(() => {
         if (nickname) {
-            fetch("http://localhost:8080/exam/" + quizId, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ nickname: nickname })
-            })
-            .then(res => res.json())
-            .then(data => { setQuestions(data) });
             fetch("http://localhost:8080/quizzes/" + quizId)
             .then(res => res.json())
             .then(data => {
@@ -35,11 +26,25 @@ export default function ExamPage() {
                     setTimeLeft(prevState => prevState - 1);
                 }, 1000);
                 const timeoutId = setTimeout(() => {
+                    setResult({
+                        nickname: nickname,
+                        correctAnswers: 0,
+                        totalAnswers: 0,
+                    });
                     setShowModal(true);
                 }, data.duration * 60000);
                 setIntervalId(intervalId);
                 setTimeoutId(timeoutId);
             });
+            fetch("http://localhost:8080/exam/" + quizId, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ nickname: nickname })
+            })
+            .then(res => res.json())
+            .then(data => setQuestions(data));
         }
         else navigate("/quiz/" + quizId);
         return () => {
@@ -51,7 +56,7 @@ export default function ExamPage() {
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     };
 
     const markAnswer = (questionId, answerId) => {
@@ -103,7 +108,8 @@ export default function ExamPage() {
         }}>
             <Typography sx={{
                 position: "absolute",
-                right: 15,
+                left: "100%",
+                ml: -13.5,
                 top: 5
             }}>Timer: {formatTime(timeLeft)}</Typography>
             <Typography
@@ -162,16 +168,15 @@ export default function ExamPage() {
                         display: "flex",
                         gap: 2,
                         justifyContent: "center",
-                        mt: 1,
-                        mb: 0.8
+                        my: 0.7,
                     }}>
                         <Button
                             onClick={() => navigate("/quiz/" + quizId)}
-                            sx={{ width: "40%" }}
+                            sx={{ width: "45%" }}
                         >Try again</Button>
                         <Button
                             onClick={() => navigate("/results/" + quizId)}
-                            sx={{ width: "40%" }}
+                            sx={{ width: "45%" }}
                         >View results</Button>
                     </Box>
                 </ModalDialog>

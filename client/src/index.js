@@ -16,7 +16,7 @@ export const GlobalContext = createContext();
 
 function App() {
   const smallScreen = useMediaQuery("(max-width: 600px)");
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState("");
   const [nickname, setNickname] = useState("");
 
   return (
@@ -38,8 +38,4 @@ function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  //<React.StrictMode>
-    <App />
-  //</React.StrictMode>
-);
+root.render(<App />);

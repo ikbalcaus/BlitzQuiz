@@ -1,5 +1,15 @@
 const { app, db } = require("../setup.js");
 
+let timers = [];
+const findTimer = (quizId, nickname) => {
+    for (let i = timers.length - 1; i >= 0; i--) {
+        if (timers[i].quizId == quizId && timers[i].nickname == nickname) {
+            return timers[i].timerId;
+        }
+    }
+    return null;
+}
+
 app.get("/exam/:quizId", async (req, res) => {
     const quizId = req.params.quizId;
     db.all("SELECT nickname, correctAnswers, totalAnswers, duration, date FROM Results WHERE quizId = ? ORDER BY date DESC",
@@ -40,6 +50,14 @@ app.post("/exam/:quizId", async (req, res) => {
                     answers: answers.map(answer => ({ ...answer, isCorrect: 0 }))
                 });
                 if (record.length == questions.length) {
+                    const timerId = setTimeout(() => {
+                        saveResultToDatabase(quizId, nickname, 0, 0, "0");
+                    }, duration * 60000);
+                    timers.push({
+                        "timerId": timerId,
+                        "quizId": quizId,
+                        "nickname": nickname
+                    });
                     res.status(201).send(record);
                 }
             });
@@ -57,6 +75,7 @@ app.put("/exam/:quizId", async (req, res) => {
         return;
     }
     let record = [];
+    clearTimeout(findTimer(quizId, nickname));
     db.all("SELECT id FROM Questions WHERE quizId = ?",
     [quizId], function(err, questions) {
         if (err) {
