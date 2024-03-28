@@ -1,23 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Input, IconButton, Container, Button } from '@mui/joy';
 import { Add } from '@mui/icons-material';
 import QuestionInput from '../components/QuestionInput.jsx';
 import AnswerInput from '../components/AnswerInput.jsx';
+import { GlobalContext } from '../index';
 
 export default function QuestionsPage() {
     const navigate = useNavigate();
     const quizId = window.location.pathname.split("/")[2];
     const [questions, setQuestions] = useState([]);
+    const { serverAddress } = useContext(GlobalContext);
 
     useEffect(() => {
-        fetch("http://localhost:8080/questions/" + quizId)
+        fetch(serverAddress + "/questions/" + quizId)
         .then(res => res.json())
         .then(data => setQuestions(data));
     }, []);
 
     const addQuestion = () => {
-        fetch("http://localhost:8080/questions/" + quizId, {
+        fetch(serverAddress + "/questions/" + quizId, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -33,7 +35,7 @@ export default function QuestionsPage() {
     }
 
     const addAnswer = (questionId) => {
-        fetch("http://localhost:8080/answers/" + quizId, {
+        fetch(serverAddress + "/answers/" + quizId, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -52,7 +54,7 @@ export default function QuestionsPage() {
     }
 
     return (
-        <Container>
+        <Container sx={{ my: 5 }}>
             <Box sx={{
                 width: "80%",
                 minWidth: "300px",
@@ -74,6 +76,7 @@ export default function QuestionsPage() {
                         id="add-question-input"
                         placeholder="Enter new question"
                         sx={{ width: "100%" }}
+                        autoComplete="off"
                         spellCheck="false"
                     />
                     <IconButton
@@ -114,11 +117,12 @@ export default function QuestionsPage() {
                                 }}>
                                     <Input sx={{
                                         width: "100%",
-                                        borderTop: 0,
-                                        spellCheck: "false"
+                                        borderTop: 0
                                     }}
                                         id={"add-answer-input-" + question.id}
                                         placeholder="Enter new answer"
+                                        autoComplete="off"
+                                        spellCheck="false"
                                     />
                                     <IconButton
                                         variant="soft"

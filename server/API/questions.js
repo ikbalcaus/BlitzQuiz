@@ -71,10 +71,6 @@ app.delete("/questions/:questionId", (req, res) => {
             res.status(500).send({ message: err.message });
             return;
         }
-        if (this.changes == 0) {
-            res.status(404).send({ message: "Question is not found" });
-            return;
-        }
         res.status(204).send();
     });
 });
@@ -82,11 +78,11 @@ app.delete("/questions/:questionId", (req, res) => {
 app.get("/questions/:quizId/count", (req, res) => {
     const quizId = req.params.quizId;
     db.get("SELECT COUNT(id) AS count FROM Questions WHERE quizId = ?",
-    [quizId], function (err, record) {
+    [quizId], function(err, record) {
         if (err) {
             res.status(500).send({ message: err.message });
             return;
         }
         res.status(200).send(record);
     });
-})
+});

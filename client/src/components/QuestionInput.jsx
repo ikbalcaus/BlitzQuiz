@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import { Box, Input, IconButton } from '@mui/joy';
 import { Remove, ArrowRight, ArrowDropDown } from '@mui/icons-material';
+import { GlobalContext } from '../index';
 
 export default function QuestionInput({ question, updateQuestionDOM, deleteQuestionDOM, onExpand }) {
+    const { serverAddress } = useContext(GlobalContext);
+
     const updateQuestion = (event, questionId) => {
         const name = event.target.value
-        fetch("http://localhost:8080/questions/" + questionId, {
+        fetch(serverAddress + "/questions/" + questionId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -16,7 +20,7 @@ export default function QuestionInput({ question, updateQuestionDOM, deleteQuest
     }
 
     const deleteQuestion = (questionId) => {
-        fetch("http://localhost:8080/questions/" + questionId, {
+        fetch(serverAddress + "/questions/" + questionId, {
             method: "DELETE"
         });
         deleteQuestionDOM(questionId);
@@ -35,6 +39,7 @@ export default function QuestionInput({ question, updateQuestionDOM, deleteQuest
                 value={question.name}
                 onChange={(event) => updateQuestion(event, question.id)}
                 sx={{ width: "100%" }}
+                autoComplete="off"
                 spellCheck="false"
             />
             <IconButton

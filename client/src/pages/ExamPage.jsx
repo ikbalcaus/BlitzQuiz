@@ -13,11 +13,14 @@ export default function ExamPage() {
     const [timeLeft, setTimeLeft] = useState(0);
     const [intervalId, setIntervalId] = useState(null);
     const [timeoutId, setTimeoutId] = useState(null);
-    const { nickname } = useContext(GlobalContext);
+    const { serverAddress, nickname } = useContext(GlobalContext);
 
     useEffect(() => {
         if (nickname) {
-            fetch("http://localhost:8080/quizzes/" + quizId)
+            fetch(serverAddress + "/questions/" + quizId + "/count")
+            .then(res => res.json())
+            .then(data => (data.count == 0) ? navigate("/quiz/" + quizId) : null);
+            fetch(serverAddress + "/quizzes/" + quizId)
             .then(res => res.json())
             .then(data => {
                 setQuizData(data);
@@ -36,7 +39,7 @@ export default function ExamPage() {
                 setIntervalId(intervalId);
                 setTimeoutId(timeoutId);
             });
-            fetch("http://localhost:8080/exam/" + quizId, {
+            fetch(serverAddress + "/exam/" + quizId, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -73,7 +76,7 @@ export default function ExamPage() {
     }
 
     const finishQuiz = () => {
-        fetch("http://localhost:8080/exam/" + quizId, {
+        fetch(serverAddress + "/exam/" + quizId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

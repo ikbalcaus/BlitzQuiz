@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import { Box, Input, IconButton, Checkbox } from '@mui/joy';
 import { Remove } from '@mui/icons-material';
+import { GlobalContext } from '../index';
 
 export default function AnswerInput({ answer, questionId, updateAnswerDOM, deleteAnswerDOM, changeStateDOM }) {
+    const { serverAddress } = useContext(GlobalContext);
+
     const updateAnswer = (event, answerId) => {
         const name = event.target.value
-        fetch("http://localhost:8080/answers/" + answerId, {
+        fetch(serverAddress + "/answers/" + answerId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -20,14 +24,14 @@ export default function AnswerInput({ answer, questionId, updateAnswerDOM, delet
     }
 
     const deleteAnswer = (answerId) => {
-        fetch("http://localhost:8080/answers/" + answerId, {
+        fetch(serverAddress + "/answers/" + answerId, {
             method: "DELETE"
         })
         deleteAnswerDOM(answerId);
     }
 
     const changeStateAnswer = (answerId) => {
-        fetch("http://localhost:8080/answers/" + answerId, {
+        fetch(serverAddress + "/answers/" + answerId, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -59,6 +63,7 @@ export default function AnswerInput({ answer, questionId, updateAnswerDOM, delet
             }}
                 value={answer.name}
                 onChange={(event) => updateAnswer(event, answer.id)}
+                autoComplete="off"
                 spellCheck="false"
             />
             <IconButton

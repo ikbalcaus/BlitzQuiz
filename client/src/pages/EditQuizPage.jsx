@@ -1,24 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
+import { Container, Box, Typography, Input, Textarea, Button } from '@mui/joy'
+import { GlobalContext } from '../index';
 
 export default function EditQuizPage() {
     const navigate = useNavigate();
     const quizId = window.location.pathname.split("/")[2];
-
-    const [quizData, setQuizData] = useState({});
+    const [quizData, setQuizData] = useState({
+        name: "",
+        description: "",
+        duration: 5
+    });
+    const { serverAddress } = useContext(GlobalContext);
 
     useEffect(() => {
-        fetch("http://localhost:8080/quizzes/" + quizId)
-        .then(res => {
-            if (!res.ok) {
-                navigate("/");
-            }
-            return res.json();
-        })
-        .then(data => {
-            setQuizData(data);
-        });
+        fetch(serverAddress + "/quizzes/" + quizId)
+        .then(res => res.json())
+        .then(data => setQuizData(data));
     }, []);
 
     const handleInputChange = (event) => {
@@ -30,7 +28,7 @@ export default function EditQuizPage() {
     };
 
     const updateQuiz = () => {
-        fetch("http://localhost:8080/quizzes/" + quizId, {
+        fetch(serverAddress + "/quizzes/" + quizId, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -42,24 +40,21 @@ export default function EditQuizPage() {
     }
 
     const deleteQuiz = () => {
-        fetch("http://localhost:8080/quizzes/" + quizId, {
+        fetch(serverAddress + "/quizzes/" + quizId, {
             method: "DELETE"
         })
         navigate("/");
     }
 
     return (
-        <Box sx={{
-            width: "40%",
+        <Container sx={{
+            width: "50%",
             minWidth: "300px",
             maxWidth: "600px",
             display: "flex",
             flexDirection: "column",
             gap: 1.5,
-            position: "relative",
-            my: 5,
-            left: "50%",
-            transform: "translateX(-50%)",
+            my: 5
         }}>
             <Box>
                 <Typography level="h5">Quiz name:*</Typography>
@@ -76,7 +71,7 @@ export default function EditQuizPage() {
                 <Typography level="h5">Quiz description:</Typography>
                 <Textarea
                     name="description"
-                    value={quizData.description}
+                    value={quizData.description || ""}
                     onChange={handleInputChange}
                     minRows={3}
                     maxRows={6}
@@ -98,22 +93,11 @@ export default function EditQuizPage() {
                     spellCheck="false"
                 />
             </Box>
-            <Box>
-                <Typography level="h5">Password:</Typography>
-                <Input
-                    name="password"
-                    type="password"
-                    onChange={handleInputChange}
-                    sx={{ boxShadow: "none" }}
-                    autoComplete="off"
-                    spellCheck="false"
-                />
-            </Box>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: 1,
-                mt: 0.5
+                mt: 1
             }}>
                 <Button onClick={updateQuiz}>SUBMIT</Button>
                 <Button
@@ -130,6 +114,6 @@ export default function EditQuizPage() {
                     variant="soft"
                 >DELETE QUIZ</Button>
             </Box>
-        </Box>
+        </Container>
     )
 }

@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Input, Textarea, Button } from '@mui/joy'
+import { Container, Box, Typography, Input, Textarea, Button } from '@mui/joy'
+import { GlobalContext } from '../index';
 
 export default function MakeQuizPage() {
     const navigate = useNavigate();
-    const [quizData, setQuizData] = useState({ duration: 5 });
+    const [quizData, setQuizData] = useState({
+        name: "",
+        description: "",
+        duration: 5
+    });
+    const { serverAddress } = useContext(GlobalContext);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -15,7 +21,7 @@ export default function MakeQuizPage() {
     };
 
     const makeQuiz = () => {
-        fetch("http://localhost:8080/quizzes", {
+        fetch(serverAddress + "/quizzes", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -27,17 +33,14 @@ export default function MakeQuizPage() {
     }
 
     return (
-        <Box sx={{
-            width: "40%",
+        <Container sx={{
+            width: "50%",
             minWidth: "300px",
             maxWidth: "600px",
             display: "flex",
             flexDirection: "column",
             gap: 1.5,
-            position: "relative",
-            my: 5,
-            left: "50%",
-            transform: "translateX(-50%)",
+            my: 5
         }}>
             <Box>
                 <Typography level="h5">Quiz name:*</Typography>
@@ -74,20 +77,10 @@ export default function MakeQuizPage() {
                     spellCheck="false"
                 />
             </Box>
-            <Box>
-                <Typography level="h5">Password:</Typography>
-                <Input
-                    name="password"
-                    type="password"
-                    onChange={handleInputChange}
-                    sx={{ boxShadow: "none" }}
-                    autoComplete="off"
-                />
-            </Box>
             <Button
-                sx={{ mt: 0.5 }}
                 onClick={makeQuiz}
+                sx={{ mt: 1 }}
             >SUBMIT</Button>
-        </Box>
+        </Container>
     )
 }

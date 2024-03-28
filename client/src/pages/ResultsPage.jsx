@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Table, Button } from '@mui/joy';
+import { GlobalContext } from '../index';
 
 export default function ResultsPage() {
     const quizId = window.location.pathname.split("/")[2];
     const navigate = useNavigate();
     const [results, setResults] = useState([]);
+    const { serverAddress } = useContext(GlobalContext);
 
     useEffect(() => {
-        fetch("http://localhost:8080/exam/" + quizId)
+        fetch(serverAddress + "/exam/" + quizId)
         .then(res => res.json())
         .then(data => setResults(data))
     }, []);
@@ -19,8 +21,8 @@ export default function ResultsPage() {
             mb: 7.5
         }}>
             <Table sx={{
-                "& tr > *:not(:first-child)": { textAlign: "center" },
-                "& thead th:nth-child(1)": { width: "0px" }
+                "& tr > *:not(:first-of-type)": { textAlign: "center" },
+                "& thead th:nth-of-type(1)": { width: "0px" }
             }}>
                 <thead>
                     <tr>

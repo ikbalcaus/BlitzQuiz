@@ -25,7 +25,15 @@ app.get("/exam/:quizId", async (req, res) => {
 app.post("/exam/:quizId", async (req, res) => {
     const quizId = req.params.quizId;
     const { nickname } = req.body;
-    const duration = (await getQuizData(quizId)).duration;
+    let duration = 0;
+    db.get("SELECT duration FROM Quizzes WHERE id = ?",
+    [quizId], function(err, record) {
+        if (err) {
+            res.status(500).send({ message: err.message });
+            return;
+        }
+        duration = record.duration;
+    });
     if (!nickname) {
         res.status(302).send({ message: "Nickname is required" });
         return;
@@ -51,7 +59,17 @@ app.post("/exam/:quizId", async (req, res) => {
                 });
                 if (record.length == questions.length) {
                     const timerId = setTimeout(() => {
-                        saveResultToDatabase(quizId, nickname, 0, 0, "0");
+                        saveResultToDatabase(quizId, nickname, 0, 0, "0")
+                        .then(() => {
+                            res.status(200).send({
+                                nickname: nickname,
+                                correctAnswers: correctAnswers,
+                                totalAnswers: totalAnswers
+                            });
+                        })
+                        .catch((err) => {
+                            res.status(500).send({ message: err.message });
+                        });
                     }, duration * 60000);
                     timers.push({
                         "timerId": timerId,
@@ -107,11 +125,16 @@ app.put("/exam/:quizId", async (req, res) => {
                     for (let i = 0; i < totalAnswers; i++) {
                         if (JSON.stringify(record[i].answers) == JSON.stringify(userAnswers[i].answers)) correctAnswers++;
                     }
-                    saveResultToDatabase(quizId, nickname, correctAnswers, totalAnswers, duration);
-                    res.status(200).send({
-                        nickname: nickname,
-                        correctAnswers: correctAnswers,
-                        totalAnswers: totalAnswers
+                    saveResultToDatabase(quizId, nickname, correctAnswers, totalAnswers, duration)
+                    .then(() => {
+                        res.status(200).send({
+                            nickname: nickname,
+                            correctAnswers: correctAnswers,
+                            totalAnswers: totalAnswers
+                        });
+                    })
+                    .catch((err) => {
+                        res.status(500).send({ message: err.message });
                     });
                 }
             });
@@ -119,37 +142,12 @@ app.put("/exam/:quizId", async (req, res) => {
     });
 });
 
-const getQuizData = (quizId) => {
+const saveResultToDatabase = (quizId, nickname, correctAnswers, totalAnswers, duration) => {
     return new Promise((resolve, reject) => {
-        db.get("SELECT name, description, duration FROM Quizzes WHERE id = ?",
-        [quizId], function (err, record) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(record);
+        db.run(`INSERT INTO Results (quizId, nickname, correctAnswers, totalAnswers, duration) VALUES (?, ?, ?, ?, ?)`,
+        [quizId, nickname, correctAnswers, totalAnswers, duration], function(err) {
+            if (err) reject(err);
+            else resolve();
         });
-    });
-};
-
-const getNumberOfQuestion = (quizId) => {
-    return new Promise((resolve, reject) => {
-        db.get("SELECT COUNT(id) AS count FROM Questions WHERE quizId = ?",
-        [quizId], function (err, record) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(record["count"]);
-        });
-    });
-}
-
-const saveResultToDatabase = async (quizId, nickname, correctAnswers, totalAnswers, duration) => {
-    db.run(`INSERT INTO Results (quizId, nickname, correctAnswers, totalAnswers, duration) VALUES (?, ?, ?, ?, ?)`,
-    [quizId, nickname, correctAnswers, totalAnswers, duration], (err) => {
-        if (err) {
-            console.log(err.message);
-        }
     });
 };

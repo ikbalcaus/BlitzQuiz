@@ -44,10 +44,6 @@ app.delete("/answers/:answerId", (req, res) => {
             res.status(500).send({ message: err.message });
             return
         }
-        if (this.changes == 0) {
-            res.status(404).send({ message: "Answer is not found" });
-            return;
-        }
         res.status(204).send();
     });
 });
