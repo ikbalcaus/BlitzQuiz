@@ -1,10 +1,11 @@
 # BlitzQuiz
 
-Web application built with React.js and Express.js
+Quiz game built with React.js and Express.js
 
 ## Project Setup
 
 #### Download [Node.js](https://nodejs.org/en), and install the necessary modules inside client directory and server directory separately
+
 ```sh
 cd client
 npm install
@@ -17,14 +18,14 @@ npm install
 
 ## Start application in development mode
 
-#### Backend
+#### Server
 
 ```sh
 cd server
 node app.js
 ```
 
-#### Frontend
+#### Client
 
 ```sh
 cd client
@@ -41,8 +42,6 @@ npm start
 ![](/screenshots/6.png)
 ![](/screenshots/7.png)
 ![](/screenshots/8.png)
-
-### This application is not stable and needs some imporvement!
 
 ## Support
 Star this repository :star:  

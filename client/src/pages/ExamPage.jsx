@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Box, Typography, Checkbox, Button, Modal, ModalDialog } from '@mui/joy'
 import { GlobalContext } from '../index';
@@ -6,7 +6,7 @@ import { GlobalContext } from '../index';
 export default function ExamPage() {
     const navigate = useNavigate();
     const quizId = window.location.pathname.split("/")[2];
-    const [quizData, setQuizData] = useState({});
+    const [data2, setQuizData] = useState({});
     const [questions, setQuestions] = useState([]);
     const [result, setResult] = useState({});
     const [showModal, setShowModal] = useState(false);
@@ -17,14 +17,26 @@ export default function ExamPage() {
 
     useEffect(() => {
         if (nickname) {
-            fetch(serverAddress + "/questions/" + quizId + "/count")
-            .then(res => res.json())
-            .then(data => (data.count == 0) ? navigate("/quiz/" + quizId) : null);
-            fetch(serverAddress + "/quizzes/" + quizId)
-            .then(res => res.json())
+            Promise.all([
+                fetch(serverAddress + "/questions/" + quizId + "/count"),
+                fetch(serverAddress + "/quizzes/" + quizId),
+                fetch(serverAddress + "/exam/" + quizId, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ nickname: nickname })
+                })
+            ])
+            .then(responses => Promise.all(responses.map(res => res.json())))
             .then(data => {
-                setQuizData(data);
-                setTimeLeft(data.duration * 60);
+                const [data1, data2, data3] = data;
+                if (data1.count == 0) {
+                    navigate("/quiz/" + quizId);
+                    return;
+                }
+                setQuizData(data2);
+                setTimeLeft(data2.duration * 60);
                 const intervalId = setInterval(() => {
                     setTimeLeft(prevState => prevState - 1);
                 }, 1000);
@@ -35,26 +47,19 @@ export default function ExamPage() {
                         totalAnswers: 0,
                     });
                     setShowModal(true);
-                }, data.duration * 60000);
+                }, data2.duration * 60000);
                 setIntervalId(intervalId);
                 setTimeoutId(timeoutId);
+                setQuestions(data3);
             });
-            fetch(serverAddress + "/exam/" + quizId, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ nickname: nickname })
-            })
-            .then(res => res.json())
-            .then(data => setQuestions(data));
         }
         else navigate("/quiz/" + quizId);
         return () => {
             clearInterval(intervalId);
             clearTimeout(timeoutId);
-        }
+        };
     }, []);
+    
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
@@ -84,7 +89,7 @@ export default function ExamPage() {
             body: JSON.stringify({
                 nickname: nickname,
                 userAnswers: questions,
-                duration: `${formatTime(quizData.duration * 60 - timeLeft)} / ${formatTime(quizData.duration * 60)}`
+                duration: `${formatTime(data2.duration * 60 - timeLeft)} / ${formatTime(data2.duration * 60)}`
             })
         })
         .then(res => res.json())
@@ -118,7 +123,7 @@ export default function ExamPage() {
             <Typography
                 level="h2"
                 sx={{ alignSelf: "center" }}
-            >{quizData.name}</Typography>
+            >{data2.name}</Typography>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",

@@ -11,12 +11,16 @@ export default function QuizInfoPage() {
     const { serverAddress, setNickname } = useContext(GlobalContext);
 
     useEffect(() => {
-        fetch(serverAddress + "/quizzes/" + quizId)
-        .then(res => res.json())
-        .then(data => setQuiz(data));
-        fetch(serverAddress + "/questions/" + quizId + "/count")
-        .then(res => res.json())
-        .then(data => setNumberOfQuestions(data.count));
+        Promise.all([
+            fetch(serverAddress + "/quizzes/" + quizId),
+            fetch(serverAddress + "/questions/" + quizId + "/count")
+        ])
+        .then(responses => Promise.all(responses.map(res => res.json())))
+        .then(data => {
+            const [data1, data2] = data;
+            setQuiz(data1);
+            setNumberOfQuestions(data2.count);
+        });
     }, []);
 
     return (

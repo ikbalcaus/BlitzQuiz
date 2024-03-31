@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Container, Box, Typography, Input, Textarea, Button } from '@mui/joy'
 import { GlobalContext } from '../index';
+import { PowerInputOutlined } from '@mui/icons-material';
 
 export default function MakeQuizPage() {
     const navigate = useNavigate();
@@ -11,14 +12,6 @@ export default function MakeQuizPage() {
         duration: 5
     });
     const { serverAddress } = useContext(GlobalContext);
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setQuizData(({
-            ...quizData,
-            [name]: value
-        }));
-    };
 
     const makeQuiz = () => {
         fetch(serverAddress + "/quizzes", {
@@ -45,8 +38,8 @@ export default function MakeQuizPage() {
             <Box>
                 <Typography level="h5">Quiz name:*</Typography>
                 <Input
-                    name="name"
-                    onChange={handleInputChange}
+                    value={quizData.name}
+                    onChange={(event) => setQuizData({ ...quizData, name: event.target.value })}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
                     spellCheck="false"
@@ -55,8 +48,8 @@ export default function MakeQuizPage() {
             <Box>
                 <Typography level="h5">Quiz description:</Typography>
                 <Textarea
-                    name="description"
-                    onChange={handleInputChange}
+                    value={quizData.description}
+                    onChange={(event) => setQuizData({ ...quizData, description: event.target.value })}
                     minRows={3}
                     maxRows={6}
                     sx={{ boxShadow: "none" }}
@@ -66,12 +59,11 @@ export default function MakeQuizPage() {
             <Box>
                 <Typography level="h5">Duration in minutes:*</Typography>
                 <Input
-                    name="duration"
                     type="number"
                     value={quizData.duration}
+                    onChange={(event) => setQuizData({ ...quizData, duration: event.target.value })}
                     min={1}
                     max={120}
-                    onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
                     spellCheck="false"

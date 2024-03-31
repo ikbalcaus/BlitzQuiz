@@ -19,14 +19,6 @@ export default function EditQuizPage() {
         .then(data => setQuizData(data));
     }, []);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setQuizData({
-            ...quizData,
-            [name]: value
-        });
-    };
-
     const updateQuiz = () => {
         fetch(serverAddress + "/quizzes/" + quizId, {
             method: "PUT",
@@ -59,9 +51,8 @@ export default function EditQuizPage() {
             <Box>
                 <Typography level="h5">Quiz name:*</Typography>
                 <Input
-                    name="name"
                     value={quizData.name}
-                    onChange={handleInputChange}
+                    onChange={(event) => setQuizData({ ...quizData, name: event.target.value })}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
                     spellCheck="false"
@@ -70,9 +61,8 @@ export default function EditQuizPage() {
             <Box>
                 <Typography level="h5">Quiz description:</Typography>
                 <Textarea
-                    name="description"
                     value={quizData.description || ""}
-                    onChange={handleInputChange}
+                    onChange={(event) => setQuizData({ ...quizData, description: event.target.value })}
                     minRows={3}
                     maxRows={6}
                     autoComplete="off"
@@ -82,12 +72,11 @@ export default function EditQuizPage() {
             <Box>
                 <Typography level="h5">Duration in minutes:*</Typography>
                 <Input
-                    name="duration"
                     type="number"
                     value={quizData.duration}
+                    onChange={(event) => setQuizData({ ...quizData, duration: event.target.value })}
                     min={1}
                     max={120}
-                    onChange={handleInputChange}
                     sx={{ boxShadow: "none" }}
                     autoComplete="off"
                     spellCheck="false"
